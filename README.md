@@ -4,8 +4,8 @@ A web app to generate printer friendly mockups of project Gactomb cards from an 
 
 ---
 ## To-Do List: 
-1. Landing page with upload button
-2. Upload excel doc to folder
+1. Landing page with upload button - **Done**
+2. Upload excel doc to folder - **Done**
 3. Reading the excel file
 4. Unpacking the excel data
 5. Handlebar template for the data

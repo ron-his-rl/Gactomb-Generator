@@ -1,9 +1,17 @@
 const path = require("path");
-
-// Require the fastify framework and instantiate it
-const fastify = require("fastify")({
-  // set this to true for detailed logging:
-  logger: false,
+const formidable = require('formidable');
+const fastify = require("fastify")({  // Require the fastify framework and instantiate it
+  logger: false,  // set this to true for detailed logging:
+});
+fastify.register(require('fastify-multipart'), { //enable multipart form data
+  limits: {
+    fieldNameSize: 100, // Max field name size in bytes
+    fieldSize: 1000000, // Max field value size in bytes
+    fields: 10,         // Max number of non-file fields
+    fileSize: 1000000,   // For multipart forms, the max file size
+    files: 1,           // Max number of file fields
+    headerPairs: 2000   // Max number of header key=>value pairs
+  }
 });
 
 // Setup our static files
@@ -33,12 +41,10 @@ fastify.get("/", function (request, reply) {
 });
 
 // A POST route to handle form submissions
-fastify.post("/", function (request, reply) {
-  let params = {
-    greeting: "Hello Form!",
-  };
-  // request.body.paramName <-- a form post example
-  return reply.view("/src/pages/index.hbs", params);
+fastify.post("/fileupload", async function (request, reply) {
+  const data = await request.saveRequestFiles()
+  reply.send(data[0].filename + ' uploaded to ' + data[0].filepath);
+
 });
 
 // Run the server and report out to the logs
